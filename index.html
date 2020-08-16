@@ -1,0 +1,159 @@
+<!DOCTYPE HTML>
+<!--
+	Fractal by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Ushio V2ray</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<script type="text/javascript">block_aplayer = true;</script>
+	    <script src="https://cdn.yimian.xyz/ushio-js/ushio-head.min.js"></script>
+	    <script type="text/javascript">page.auth = ['tel']</script>
+	</head>
+	<body class="is-preload">
+
+		<!-- Header -->
+			<header id="header">
+				<div class="content">
+					<h1><a href="#">V2ray</a></h1>
+					<p id="info"></p>
+					<p>扫描以上二维码迅速添加~<br />
+					你也可以将下方链接添加到v2ray订阅</p>
+
+	
+					<input type="text" id="sub" ><br/>
+					<ul class="actions">
+						<li><a href="#" class="button primary icon solid fa-chevron-down scrolly" id="copy">Copy</a></li>
+						<li><a href="https://onedrive.yimian.xyz/packages/programs/all/v2ray/" class="button icon solid fa-download">Download</a></li>
+					</ul>
+				</div>
+				<div class="image phone"><div class="inner"><!--<img src="images/screen.jpg" alt="" />--><div id="qrcode"></div></div></div>
+			</header>
+
+
+		<!-- Footer -->
+			<footer id="footer">
+
+				<p class="copyright">&copy; 2018-<script type="text/javascript">document.write(new Date().getFullYear())</script> <a href="https://iotcat.me">iotcat</a>  | Powered by <a href="https://ushio.cool">Ushio</a> | Credits: <a href="http://html5up.net">HTML5 UP</a></p>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/qrcode.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+			<script type="text/javascript" src="https://cdn.yimian.xyz/ushio-js/ushio-footer.min.js"></script>
+			<script type="text/javascript">
+				var qrcode = new QRCode("qrcode", {
+				    text: '',
+				    width: 150,
+				    height: 150,
+				    colorDark : "#000000",
+				    colorLight : "#ffffff",
+				    correctLevel : QRCode.CorrectLevel.M
+				});
+				tips.info({
+					message: '身份认证中..请稍等..'
+				});
+				session.onload(()=>{
+					$('#sub').val('https://api.yimian.xyz/v2ray/?hash='+session.get('hash'));
+					$.get('https://api.yimian.xyz/v2ray/?hash='+session.get('hash'), function(res){
+						res = window.atob(res);
+						var s = res.split("\n");
+						s.forEach((item)=>{
+							if(!item){
+								s.splice(s.indexOf(item));
+							}
+						});
+						var arr = [];
+						s.forEach((item)=>{
+							arr.push(JSON.parse(window.atob(item.substr(8))));
+						});
+						console.log(arr);
+						var i = 0;
+						function next(){
+
+							$('#info').html('<strong>host:</strong> '+ arr[i%s.length]['host']);
+							qrcode.makeCode(s[i++%s.length]);
+						}
+						next();
+						tips.show({
+							message: '点击二维码可以切换哦~',
+							timeout: 25000
+						});
+						$('#qrcode').click(function(){
+							next();
+						});
+					});
+				});
+
+window.Clipboard = (function(window, document, navigator) {
+  var textArea,
+      copy;
+
+  // 判断是不是ios端
+  function isOS() {
+    return navigator.userAgent.match(/ipad|iphone/i);
+  }
+  //创建文本元素
+  function createTextArea(text) {
+    textArea = document.createElement('textArea');
+    textArea.value = text;
+    document.body.appendChild(textArea);
+  }
+  //选择内容
+  function selectText() {
+    var range,
+        selection;
+
+    if (isOS()) {
+      range = document.createRange();
+      range.selectNodeContents(textArea);
+      selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      textArea.setSelectionRange(0, 999999);
+    } else {
+      textArea.select();
+    }
+  }
+
+//复制到剪贴板
+  function copyToClipboard() {        
+    try{
+      if(document.execCommand("Copy")){
+        alert("订阅地址复制成功！");  
+      }else{
+        alert("复制失败！请手动复制！");
+      }
+    }catch(err){
+      alert("复制错误！请手动复制！")
+    }
+    document.body.removeChild(textArea);
+  }
+
+  copy = function(text) {
+    createTextArea(text);
+    selectText();
+    copyToClipboard();
+  };
+
+  return {
+    copy: copy
+  };
+})(window, document, navigator);
+
+
+$('#copy').click(function(){
+	Clipboard.copy($('#sub').val());
+});
+			</script>
+	</body>
+</html>
