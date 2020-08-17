@@ -5,7 +5,7 @@
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
 <html>
-	<head>
+<head>
 		<title>Ushio V2ray</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
@@ -49,7 +49,7 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
-			<script type="text/javascript" src="https://cdn.yimian.xyz/ushio-js/ushio-footer.min.js"></script>
+			<script type="text/javascript" src="https://cdn.yimian.xyz/ushio-js/ushio-footer.js"></script>
 			<script type="text/javascript">
 				var qrcode = new QRCode("qrcode", {
 				    text: '',
@@ -60,7 +60,8 @@
 				    correctLevel : QRCode.CorrectLevel.M
 				});
 				tips.info({
-					message: '身份认证中..请稍等..'
+					message: '身份认证中..请稍等..',
+                    timeout: 5000
 				});
 				session.onload(()=>{
 					$('#sub').val('https://api.yimian.xyz/v2ray/?hash='+session.get('hash'));
@@ -84,10 +85,12 @@
 							qrcode.makeCode(s[i++%s.length]);
 						}
 						next();
-						tips.show({
-							message: '点击二维码可以切换哦~',
-							timeout: 25000
-						});
+                        if(arr.length > 1){
+                            tips.show({
+                                message: '点击二维码可以切换哦~',
+                                timeout: 25000
+                            });
+                        }
 						$('#qrcode').click(function(){
 							next();
 						});
